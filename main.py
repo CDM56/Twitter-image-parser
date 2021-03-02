@@ -1,15 +1,10 @@
-from __future__ import print_function
 import tweepy
 from tweepy.api import API
-import urllib
 import os
-import json
-import sys
 import urllib.request
 
 from credentials import *
 
-i = 1
 consumer_key = GIT_CKEY
 consumer_secret = GIT_CKEY_S
 access_token = GIT_ACCESS
@@ -22,32 +17,26 @@ api = tweepy.API(auth)
 class MyStreamListener(tweepy.StreamListener):
     def __init__(self, api=None):
         self.api = api or API()
-        self.n = 0
-        self.m = 1
 
     def on_status(self, status):
-        if 'media' in status.entities:
+        if 'media' in status.entities: # If a media is present in the tweet
             for image in  status.entities['media']: 
-                picName = str(image['id']) + ".jpg"
+                picName = str(image['id']) + ".jpg" # Image naming. Naming by id to remove double the same image (retweets)
                 link = image['media_url']
-                print(link)
+                print(link) # Print the tweet media link for debug
                 filename = os.path.join(FOLDER,picName)
-                urllib.request.urlretrieve(link,filename)
+                urllib.request.urlretrieve(link,filename) #Writing the image in the folder given in credentials.py
                 #use to test
-                print(status.user.screen_name)
+                print(status.user.screen_name) # Print twwet username for debug
 
         else: 
-            print("no media_url")
+            print("no media_url") # if no media, for debug
 
-        if self.n < self.m: 
-            return True
-        else:
-            print ('tweets = '+str(self.n))
-            return False
+        return True # for program loop
 
     def on_error(self, status):
         print (status)
 
 myStreamListener = MyStreamListener()
-myStream = tweepy.Stream(auth, MyStreamListener(),timeout=30)
+myStream = tweepy.Stream(auth, MyStreamListener(),timeout=30) # watch tweet stream with packet timeout of 30 seconds
 myStream.filter(track= HASHTAGS)
