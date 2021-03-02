@@ -31,7 +31,7 @@ class MyStreamListener(tweepy.StreamListener):
                 picName = str(image['id']) + ".jpg"
                 link = image['media_url']
                 print(link)
-                filename = os.path.join("/home/gura/test/twitterpic/",picName)
+                filename = os.path.join(FOLDER,picName)
                 urllib.request.urlretrieve(link,filename)
                 #use to test
                 print(status.user.screen_name)
@@ -50,8 +50,4 @@ class MyStreamListener(tweepy.StreamListener):
 
 myStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth, MyStreamListener(),timeout=30)
-myStream.filter(track=['#gawrt', '#artsofashes', 'ameliaRT', '#callillust', '#inART', '#ほしまちぎゃらりー', '#メルArt', '#絵フブキ', '#まつりは絵っち', '#祭絵'
-, 'はあとart', '#あくあーと', '#シオンの書物', '#百鬼絵巻', '#しょこらーと', '#プロテインザスバル', '#みおーん絵'
-, '#絵かゆ', '#できたてころね', '#ぺこらーと', '#絵クロマンサー', '#しらぬえ', '#ノエラート', '#マリンのお宝'
-, '#かなたーと', '#みかじ絵', '#つのまきあーと', '#TOWART', ' #ルーナート', ' #セクシールーナート'
-, '#らみあ〜と', '#ねねアルバム', '#ししらーと', '#魔乃アロエ', '#絵まる', '#HoshinovArt', '#いなート', '#絵ニックス'])
+myStream.filter(track= HASHTAGS)
